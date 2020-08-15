@@ -1,5 +1,6 @@
 import datetime
 import cv2
+import random
 import numpy as np
 
 black_pic = np.zeros([512, 1024, 3], np.uint8)
@@ -69,20 +70,20 @@ def click_event(event, x, y, flags, param):
         if len(btn_mem) <= 0:
             print(btn_mem)
             btn_mem.append((x, y))
-            f = cv2.circle(black_pic, (x,y), 1, (255, 255, 255), 5)
+            f = cv2.circle(black_pic, (x,y), 1, (random.randint(0,255), random.randint(0,255), random.randint(0,255)), 5)
             cv2.imshow('image', f)
         else:
             print(btn_mem)
             btn_mem.append((x, y))
-            f = cv2.line(black_pic, btn_mem[-1], btn_mem[-2], (0,255,0), 1)
-            f = cv2.circle(f, btn_mem[-1], 1, (255, 255, 255), 5)
+            f = cv2.line(black_pic, btn_mem[-1], btn_mem[-2], (random.randint(0,255),random.randint(0,255),random.randint(0,255)), 1)
+            f = cv2.circle(f, btn_mem[-1], 1, (random.randint(0,255), random.randint(0,255), random.randint(0,255)), 5)
             cv2.imshow('image', f)
 
     if event == cv2.EVENT_RBUTTONDOWN:
         btn_mem.append((x, y))
-        f = cv2.circle(black_pic, (x, y), 1, (255, 255, 255), 5)
-        f = cv2.line(black_pic, btn_mem[-1], btn_mem[-2], (0, 255, 0), 1)
-        f = cv2.line(black_pic, btn_mem[0], btn_mem[-1], (123, 255, 0), 1)
+        f = cv2.circle(black_pic, (x, y), 1, (random.randint(0,255), random.randint(0,255), random.randint(0,255)), 5)
+        f = cv2.line(black_pic, btn_mem[-1], btn_mem[-2], (random.randint(0,255), random.randint(0,255), random.randint(0,255)), 1)
+        f = cv2.line(black_pic, btn_mem[0], btn_mem[-1], (random.randint(0,255), random.randint(0,255), random.randint(0,255)), 1)
         cv2.imshow('image', f)
 
     if False:
