@@ -27,7 +27,6 @@ def video_capture():
     # out = cv2.VideoWriter('out_vid.avi', fourcc, 20.0, (640, 480))
     while cap.isOpened():
         ret, frame = cap.read()     # true/false if frame is available/ 2nd var is the current frame    reads frame from cap
-
         if not ret:
             break
 
@@ -56,41 +55,59 @@ def draw_geom_shapes():
     font = cv2.FONT_HERSHEY_SIMPLEX     # choose font for text
     img = cv2.putText(img, "HEEEY", (10, 500), font, 4, (255, 255, 255), 10, cv2.LINE_AA)
 
-
     cv2.imshow("img", img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
     # pass
 
 
+btn_mem = []
 # some kind of magic here. x&y - coords
 def click_event(event, x, y, flags, param):
     font = cv2.FONT_HERSHEY_SIMPLEX
-
-
     if event == cv2.EVENT_LBUTTONDOWN:
-        print("coords: ", str(x) + ', ' + str(y))
-        strXY = str(x) + ', ' + str(y)
-        cv2.putText(girl_face, strXY, (x, y), font, 1, (255, 255, 255), 2)
-        cv2.imshow('image', girl_face)
+        if len(btn_mem) <= 0:
+            print(btn_mem)
+            btn_mem.append((x, y))
+            f = cv2.circle(black_pic, (x,y), 1, (255, 255, 255), 5)
+            cv2.imshow('image', f)
+        else:
+            print(btn_mem)
+            btn_mem.append((x, y))
+            f = cv2.line(black_pic, btn_mem[-1], btn_mem[-2], (0,255,0), 1)
+            f = cv2.circle(f, btn_mem[-1], 1, (255, 255, 255), 5)
+            cv2.imshow('image', f)
 
     if event == cv2.EVENT_RBUTTONDOWN:
-        blue = girl_face[y, x, 0]
-        green = girl_face[y, x, 1]
-        red = girl_face[y, x, 2]
-        print("colors: ", str(blue) + ', ' + str(green) + ', ' + str(red))
-        strXY = str(blue) + ', ' + str(green) + ', ' + str(red)
-        cv2.putText(girl_face, strXY, (x, y), font, 1, (0, 255, 255), 2)
-        cv2.imshow('image', girl_face)
+        btn_mem.append((x, y))
+        f = cv2.circle(black_pic, (x, y), 1, (255, 255, 255), 5)
+        f = cv2.line(black_pic, btn_mem[-1], btn_mem[-2], (0, 255, 0), 1)
+        f = cv2.line(black_pic, btn_mem[0], btn_mem[-1], (123, 255, 0), 1)
+        cv2.imshow('image', f)
+
+    if False:
+        if event == cv2.EVENT_LBUTTONDOWN:
+            print("coords: ", str(x) + ', ' + str(y))
+            strXY = str(x) + ', ' + str(y)
+            cv2.putText(girl_face, strXY, (x, y), font, 1, (255, 255, 255), 2)
+            cv2.imshow('image', girl_face)
+
+        if event == cv2.EVENT_RBUTTONDOWN:
+            blue = girl_face[y, x, 0]
+            green = girl_face[y, x, 1]
+            red = girl_face[y, x, 2]
+            print("colors: ", str(blue) + ', ' + str(green) + ', ' + str(red))
+            strXY = str(blue) + ', ' + str(green) + ', ' + str(red)
+            cv2.putText(girl_face, strXY, (x, y), font, 1, (0, 255, 255), 2)
+            cv2.imshow('image', girl_face)
 
 
 def handle_events():
     #events = [i for i in dir(cv2) if 'EVENT' in i]
     #print(events)
-    cv2.imshow('image', girl_face)
+    cv2.imshow('image', black_pic)
     cv2.setMouseCallback('image', click_event)
     cv2.waitKey()
-    pass
 
 
 def main():
