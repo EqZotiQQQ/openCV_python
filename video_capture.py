@@ -1,7 +1,7 @@
 import cv2
 import datetime
 
-copy_vid = False
+copy_vid = False        # to store vid copy
 
 def video_capture():
     vid = 'test_vid.avi'
