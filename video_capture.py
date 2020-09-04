@@ -6,12 +6,8 @@ copy_vid = False        # to store vid copy
 def video_capture():
     vid = 'test_vid.avi'
     cap = cv2.VideoCapture(vid)     # 1st arg - file from u want to read video or camera ID (-1,0,etc). Looks like it returns pointer to stream.
-    print(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    print(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     cap.set(3, 1500)            # doesn't work for tutor vid cuz of max resolution for it 320x240
     cap.set(4, 1500)            # doesn't work for tutor vid cuz of max resolution for it 320x240
-    print(cap.get(3))
-    print(cap.get(4))
 
     if copy_vid:
         fourcc = cv2.VideoWriter_fourcc('X', 'V', 'I', 'D')        # or (*'XVID')     for copy from source to file

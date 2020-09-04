@@ -1,56 +1,58 @@
+from math import sqrt
+
 import cv2
 import numpy as np
+import random
+import matplotlib as mp
+from matplotlib import pyplot as plt
+
+black_pic = np.zeros([512, 1024, 3], np.uint8)
+nodes = []
+distances = {}
+stupid_var = True
+
+def alg_prim():
+    pass
 
 
-def onValueChanged(val):
-    print(val)
+def stream_imput():
+    s = black_pic
+    if stupid_var:
+        for x_first, y_first in nodes:
+            distances_for_node = []
+            for x_sec, y_sec in nodes:
+                if x_first == x_sec and y_first == y_sec:
+                    continue
+                distances_for_node.append(sqrt((x_sec - x_first)**2 + (y_sec - y_first)**2))
+            print("dot: ({}, {}) \tdistances: {}".format(x_first, y_first, distances_for_node))
+            s = cv2.line(s, (x_first, y_first), (x_sec, y_sec), (random.randint(0,255),random.randint(0,255),random.randint(0,255)), 1)
+            cv2.imshow("foo", s)
+            #distances[node]
+    #print(distances)
 
 
-def main():
-    prop_window = cv2.namedWindow("properties")
-    #vid = cv2.VideoCapture(0)
-    vid = cv2.VideoCapture('videos/test_vid.avi')
-    # cv2.createTrackbar('LH', "properties", 0, 255, onValueChanged)
-    cv2.createTrackbar('LS', "properties", 0, 255, onValueChanged)
-    cv2.createTrackbar('LV', "properties", 0, 255, onValueChanged)
-    # cv2.createTrackbar('UH', "properties", 255, 255, onValueChanged)
-    cv2.createTrackbar('US', "properties", 255, 255, onValueChanged)
-    cv2.createTrackbar('UV', "properties", 255, 255, onValueChanged)
-    cv2.createTrackbar('Mono', "properties", 0, 255, onValueChanged)
-    while True:
-        _, pic = vid.read()
-        # pic = cv2.imread("images/balls2.jpg")
-        hsv = cv2.cvtColor(pic, cv2.COLOR_BGR2HSV)          # perform picture from RGB to HSV
-        # l_hue = cv2.getTrackbarPos('LH', "properties")
-        l_saturation = cv2.getTrackbarPos('LS', "properties")
-        l_value = cv2.getTrackbarPos('LV', "properties")
-        # r_hue = cv2.getTrackbarPos('UH', "properties")
-        r_saturation = cv2.getTrackbarPos('US', "properties")
-        r_value = cv2.getTrackbarPos('UV', "properties")
-        Mono = cv2.getTrackbarPos('Mono', "properties")
-        l_hue = Mono-5
-        r_hue = Mono+5
-        l_color = np.array([l_hue, l_saturation, l_value])
-        r_color = np.array([r_hue, r_saturation, r_value])
-        print("l_b: ", l_color)
-        print("u_b: ", r_color)
-        mask = cv2.inRange(hsv, l_color, r_color)
-        res = cv2.bitwise_and(pic, pic, mask=mask)          # use and operation for picture with mask
+def click_event(event, x, y, flags, param):
+    if event == cv2.EVENT_LBUTTONDOWN:
+        nodes.append((x, y))
+        if len(nodes) > 1:
+            stream_imput()
+            alg_prim()
+    if event == cv2.EVENT_RBUTTONDOWN:
+        nodes.clear()
 
-        cv2.imshow("base picture", pic)
-        cv2.imshow("mask", mask)
-        cv2.imshow("res", res)
-        exit_key = cv2.waitKey(1)
-        if exit_key == 27:
-            break
+    print(nodes)
 
-    vid.release()
+
+def main_loop():
+    cv2.imshow("foo", black_pic)
+    cv2.setMouseCallback("foo", click_event)
+    cv2.waitKey()
     cv2.destroyAllWindows()
 
 
-
+def main():
+    main_loop()
 
 
 if __name__ == '__main__':
     main()
-
