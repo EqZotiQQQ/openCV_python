@@ -1,4 +1,3 @@
-from datetime import time
 from math import sqrt
 from enum import Enum
 import cv2
@@ -18,8 +17,8 @@ class ALGORITHM:
     PRIME = 1
 
 
-# debug = DEBUG.NON_DEBUG
-debug = DEBUG.DEBUG_STREAM
+debug = DEBUG.NON_DEBUG
+# debug = DEBUG.DEBUG_STREAM
 # debug = DEBUG.DEBUG_STATIC
 
 
@@ -42,7 +41,7 @@ distances = {}
 
 
 def rand():
-    return random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)
+    return random.randint(35, 255), random.randint(35, 255), random.randint(35, 255)
 
 
 def connection_each_to_each():
@@ -76,10 +75,11 @@ def connect_nodes_using_prim_alg():
                 max_distance = distance
         if (x_first, y_first) not in not_tree:
             not_tree.append((x_first, y_first))
-    #print("global_max_distance = {}".format(max_distance))
+            s = cv2.circle(s, nodes[-1], 2, rand(), -1)
+    # print("global_max_distance = {}".format(max_distance))
     nearest_in_tree = None
     nearest_out_of_tree = None
-    #print("-------")
+    # print("-------")
     while len(not_tree) > 0:
         if len(tree) == 0:   # add 1st elem
             tree.append(not_tree[0])
@@ -90,14 +90,14 @@ def connect_nodes_using_prim_alg():
             nearest_out_of_tree = None
             for connected in tree:
                 for not_connected in not_tree:
-                    #print("connected = {}, not_connected = {}".format(connected, not_connected))
-                    #print("=====")
-                    #print("nodes = {}".format(nodes))
-                    #print("tree = {}".format(tree))
-                    #print("not a tree = {}".format(not_tree))
-                    #print("all_nodes = {}".format(all_nodes))
-                    #print("min_distance = {}, current_dist = {}".format(min_distance, all_nodes.get((connected, not_connected))))
-                    #print("=====")
+                    # print("connected = {}, not_connected = {}".format(connected, not_connected))
+                    # print("=====")
+                    # print("nodes = {}".format(nodes))
+                    # print("tree = {}".format(tree))
+                    # print("not a tree = {}".format(not_tree))
+                    # print("all_nodes = {}".format(all_nodes))
+                    # print("min_distance = {}, current_dist = {}".format(min_distance, all_nodes.get((connected, not_connected))))
+                    # print("=====")
                     pair = None
                     if (connected, not_connected) in all_nodes:
                         pair = (connected, not_connected)
@@ -110,20 +110,20 @@ def connect_nodes_using_prim_alg():
 
             tree.append(nearest_out_of_tree)
             not_tree.remove(nearest_out_of_tree)
-            #print("tree = {}, not_tree: {}".format(tree, not_tree))
-            #print("nearest_in_tree = {}, nearest_out_of_tree: {}".format(nearest_in_tree, nearest_out_of_tree))
-            s = cv2.line(s, nearest_in_tree, nearest_out_of_tree, white, 1)
+            # print("tree = {}, not_tree: {}".format(tree, not_tree))
+            # print("nearest_in_tree = {}, nearest_out_of_tree: {}".format(nearest_in_tree, nearest_out_of_tree))
+            # s = cv2.line(s, nearest_in_tree, nearest_out_of_tree, white, 1)
+            s = cv2.line(s, nearest_in_tree, nearest_out_of_tree, rand(), 1)
         cv2.imshow("foo", s)
 
 
 def stream_simulation():
     while True:
-        nodes.append((random.randint(0, 511), random.randint(0, 1000)))
+        nodes.append((random.randint(0, 1000), random.randint(0, 500)))
         connect_nodes_using_prim_alg()
         tree.clear()
         cv2.waitKey()
         #time.sleep(0.5)
-
 
 
 def click_event(event, x, y, flags, param):
