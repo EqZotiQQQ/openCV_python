@@ -32,7 +32,7 @@ algorithm = ALGORITHM.PRIME
 
 print("Type: {}; Algorithm: {}".format(debug, algorithm))
 
-s = None
+image = None
 
 black_pic = np.zeros([512, 1024, 3], np.uint8)      # default pic
 
@@ -55,7 +55,7 @@ white = (255, 255, 255)
 
 
 def click_event(event, x, y, flags, param):
-    global s
+    global image
     try:
         if event == cv2.EVENT_LBUTTONDOWN:
             tree.clear()
@@ -66,10 +66,10 @@ def click_event(event, x, y, flags, param):
                 elif algorithm == ALGORITHM.PRIME:
                     connect_nodes_using_prim_alg()
             else:
-                s = cv2.circle(black_pic, (x, y), 2, rand(), -1)
-                cv2.imshow("foo", s)
+                image = cv2.circle(black_pic, (x, y), 2, rand(), -1)
+                cv2.imshow("foo", image)
         if event == cv2.EVENT_MOUSEMOVE:
-            if s is not None:
+            if image is not None:
                 find_nearest(x, y)
     except:
         print("Error!")
@@ -77,7 +77,7 @@ def click_event(event, x, y, flags, param):
 
 
 def find_nearest(x_ms, y_ms):
-    picture = copy(s)
+    picture = copy(image)
     min_distance = 0
     pair = None
     for x_dot, y_dot in nodes:
@@ -98,8 +98,8 @@ def stream_simulation():
 
 
 def connect_nodes_using_prim_alg():
-    global s
-    s = np.zeros([512, 1024, 3], np.uint8)
+    global image
+    image = np.zeros([512, 1024, 3], np.uint8)
     max_distance = 0
     for x_first, y_first in nodes:
         for x_sec, y_sec in nodes:
@@ -111,7 +111,7 @@ def connect_nodes_using_prim_alg():
                 max_distance = distance
         if (x_first, y_first) not in not_tree:
             not_tree.append((x_first, y_first))
-            s = cv2.circle(s, nodes[-1], 2, rand(), -1)
+            image = cv2.circle(image, nodes[-1], 2, rand(), -1)
     nearest_in_tree = None
     nearest_out_of_tree = None
     while len(not_tree) > 0:
@@ -136,8 +136,8 @@ def connect_nodes_using_prim_alg():
 
             tree.append(nearest_out_of_tree)
             not_tree.remove(nearest_out_of_tree)
-            s = cv2.line(s, nearest_in_tree, nearest_out_of_tree, rand(), 1)
-        cv2.imshow("foo", s)
+            image = cv2.line(image, nearest_in_tree, nearest_out_of_tree, rand(), 1)
+        cv2.imshow("foo", image)
 
 
 def connection_each_to_each():
