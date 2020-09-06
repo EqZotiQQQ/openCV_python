@@ -5,7 +5,7 @@ import numpy as np
 import random
 import datetime
 import time
-
+from copy import copy
 
 class DEBUG(Enum):
     NON_DEBUG = 0
@@ -56,7 +56,6 @@ white = (255, 255, 255)
 
 def click_event(event, x, y, flags, param):
     global s
-
     try:
         if event == cv2.EVENT_LBUTTONDOWN:
             tree.clear()
@@ -78,7 +77,7 @@ def click_event(event, x, y, flags, param):
 
 
 def find_nearest(x_ms, y_ms):
-    global s
+    picture = copy(s)
     min_distance = 0
     pair = None
     for x_dot, y_dot in nodes:
@@ -86,8 +85,8 @@ def find_nearest(x_ms, y_ms):
         if min_distance == 0 or min_distance > distance:
             min_distance = distance
             pair = (x_dot, y_dot)
-    line = cv2.line(s, (x_ms, y_ms), pair, rand(), 1)
-    cv2.imshow("foo", line)
+    picture = cv2.line(picture, (x_ms, y_ms), pair, rand(), 1)
+    cv2.imshow("foo", picture)
 
 
 def stream_simulation():
