@@ -85,7 +85,7 @@ def find_nearest(x_ms, y_ms):
         if min_distance == 0 or min_distance > distance:
             min_distance = distance
             pair = (x_dot, y_dot)
-    picture = cv2.line(picture, (x_ms, y_ms), pair, rand(), 1)
+    picture = cv2.line(picture, (x_ms, y_ms), pair, white, 1)
     cv2.imshow("foo", picture)
 
 
